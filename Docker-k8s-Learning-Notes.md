@@ -18,7 +18,7 @@ Images contains multiple layers (1 instruction = 1 layer ) to optimize build spe
 `docker log -f <CONATINER-NAME>`              (Note: -f <follow mode> helps to keep listening to the future outputs generated on the terminal)
 
 #### INSPECTING IMAGES ####
-`docker image inspect <IMAGE-ID>`            (Note: Gives you the deatils of the Image and the layers its built on)
+`docker image inspect <IMAGE-ID>`            (Note: Gives you the details of the Image and the layers its built on)
 
 #### COPY File to Containers and from container to local ####
 # USECASE: To collect logs generated from a running container. OR to modify any server configuration file for test.
