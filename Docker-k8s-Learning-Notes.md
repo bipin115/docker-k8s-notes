@@ -547,9 +547,135 @@ flask-app-deploy-86bdff9454-n78jp                  1/1     Running   0          
 
 =======================================================================================================================
 
+cmd `kubectl explain service`
+
+KIND:     Service
+VERSION:  v1
+
+DESCRIPTION:
+     Service is a named abstraction of software service (for example, mysql)
+     consisting of local port (for example 3306) that the proxy listens on, and
+     the selector that determines which pods will answer requests sent through
+     the proxy.
+
+FIELDS:
+   apiVersion   <string>
+     APIVersion defines the versioned schema of this representation of an
+     object. Servers should convert recognized schemas to the latest internal
+     value, and may reject unrecognized values. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+
+   kind <string>
+     Kind is a string value representing the REST resource this object
+     represents. Servers may infer this from the endpoint the client submits
+     requests to. Cannot be updated. In CamelCase. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+
+   metadata     <Object>
+     Standard object's metadata. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+
+   spec <Object>
+     Spec defines the behavior of a service.
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+
+   status       <Object>
+     Most recently observed status of the service. Populated by the system.
+     Read-only. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+`kubectl get pods --show-labels`
+
+>> kubectl get pods --show-labels
+NAME                                READY   STATUS    RESTARTS   AGE   LABELS
+frontend-54d595b866-kqj64           1/1     Running   0          5d    io.kompose.service=frontend,pod-template-hash=54d595b866
+nginx-deployment-6595874d85-spknv   1/1     Running   0          21h   app=nginx,pod-template-hash=6595874d85
+nginx-deployment-6595874d85-zghsj   1/1     Running   0          21h   app=nginx,pod-template-hash=6595874d85
+redis-master-6d5f4cdb65-62z6b       1/1     Running   0          5d    io.kompose.service=redis-master,pod-template-hash=6d5f4cdb65
+redis-slave-76d447b769-s7wfk        1/1     Running   0          5d    io.kompose.service=redis-slave,pod-template-hash=76d447b769
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+Set POD Lable Name
+`kubectl label pod <POD NAME> type=app`
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+Enter a POD and execute CMD
+
+`kubectl get pods`
+`kubectl exec -it <POD-NAME> -- sh`
+
+NAME                                READY   STATUS    RESTARTS   AGE
+frontend-54d595b866-kqj64           1/1     Running   0          5d1h
+nginx-deployment-6595874d85-spknv   1/1     Running   0          21h
+nginx-deployment-6595874d85-zghsj   1/1     Running   0          21h
+redis-master-6d5f4cdb65-62z6b       1/1     Running   0          5d1h
+redis-slave-76d447b769-s7wfk        1/1     Running   0          5d1h
+                                                                                                                                                                 ✔
+
+  17/08/2022   15:38.55   /home/mobaxterm  kubectl exec -it nginx-deployment-6595874d85-spknv -- sh
+#
 
 
+# -----------------------------------------------------------------------------------------------------------------------
+
+PORT FORWARDING TO ACCESS ANY APPLICATION FROM OUTSIDE (ONLY SUGGESTED FOR DEBUGGING ON SAME MACHINE)
+----------------------------------------------------------------------------------------------------
+`kubectl port-forward service/nginx-service 8083/8082`
+
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+frontend-tcp   LoadBalancer   10.103.184.212   localhost     80:31085/TCP   5d1h
+kubernetes     ClusterIP      10.96.0.1        <none>        443/TCP        13d
+redis-master   ClusterIP      10.102.163.73    <none>        6379/TCP       5d1h
+redis-slave    ClusterIP      10.109.132.112   <none>        6379/TCP       5d1h
+                                                                                                                                                                 ✔
+
+  17/08/2022   15:42.22   /home/mobaxterm  kubectl port-forward service/redis-master 9093:6379
+Forwarding from 127.0.0.1:9093 -> 6379
+Forwarding from [::1]:9093 -> 6379
+
+# -------------------------------------------------------------------------------------------------------------------
+https://www.youtube.com/watch?v=YHuZ78Ig_oc&list=PLrMP04WSdCjrkNYSFvFeiHrfpsSVDFMDR
+
+`kubectl get endpoints`
+
+NAME           ENDPOINTS           AGE
+frontend-tcp   10.1.0.138:80       5d1h
+kubernetes     192.168.65.4:6443   13d
+redis-master   10.1.0.136:6379     5d1h
+redis-slave    10.1.0.137:6379     5d1h
+
+`kubectl get svc`
+
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+frontend-tcp   LoadBalancer   10.103.184.212   localhost     80:31085/TCP   5d1h
+kubernetes     ClusterIP      10.96.0.1        <none>        443/TCP        13d
+redis-master   ClusterIP      10.102.163.73    <none>        6379/TCP       5d1h
+redis-slave    ClusterIP      10.109.132.112   <none>        6379/TCP       5d1h
+
+`kubectl describe service/redis-master`
+
+Name:              redis-master
+Namespace:         default
+Labels:            io.kompose.service=redis-master
+Annotations:       kompose.cmd: D:\Softwares\kompose\kompose.exe convert
+                   kompose.version: 1.26.0 (40646f47)
+Selector:          io.kompose.service=redis-master
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                10.102.163.73
+IPs:               10.102.163.73
+Port:              6379  6379/TCP
+TargetPort:        6379/TCP
+Endpoints:         10.1.0.136:6379
+Session Affinity:  None
+Events:            <none>
+
+
+# NOTE: Using Node Port service is not suggested to use in PRODUCTION Environment.
 
 
