@@ -207,8 +207,8 @@ Benifits:
 # `docker service scale <swarm-servicename>=20`               (Scale appliation to 20 replicas)
 # `docker stack rm <service-name>`                            (To remove stack deployed application on Swarm)
 
-`docker swarm init --listen-addr <IP-Adress-Host>:2377`   (Creates a Manager Node)
-`docker node ls`   (Status of Docker swarm nodes)
+# `docker swarm init --listen-addr <IP-Adress-Host>:2377`      (Creates a Manager Node)
+# `docker node ls`                                             (Status of Docker swarm nodes)
 
 # Note: Each node should have one Master Manager
 # To create a swarm add other VM's running docker daemon
@@ -291,10 +291,6 @@ Ports:
  TargetPort = 80
  PublishedPort = 80
 In this example, we scale the service to 2 replicas.
-
-
-
-
 
 
 
@@ -420,6 +416,7 @@ Note: Minikube has kubectl as dependency
 Docker / Virtual Machine Manager – KVM & VirtualBox
 
 # Start Minikube
+`minikube start --driver=none`
 `minikube start --driver=docker`
 
 # Interact with your cluster
@@ -512,11 +509,11 @@ NOTE: Apply the secret before using in the deployment yaml file if any or else i
 
 Note to List All Kubernates components <pods, deployment, replcaset, service>: `kubectl get all`
 
-# ####################################################################################################################################
+# ################################################################################################
                                  
-                                                KUBERNATES SERVICES
+                        KUBERNATES SERVICES
 
-# ####################################################################################################################################
+# ################################################################################################
 
 Different Service Type?
 
@@ -547,6 +544,8 @@ argocd-repo-server-6c8778b8d8-98fgg                1/1     Running   2 (3d4h ago
 argocd-server-69d84fdd78-dqf5c                     1/1     Running   2 (3d4h ago)   5d2h    10.1.0.112   docker-desktop   <none>           <none>
 flask-app-deploy-86bdff9454-hn2h7                  1/1     Running   0              2d18h   10.1.0.119   docker-desktop   <none>           <none>
 flask-app-deploy-86bdff9454-n78jp                  1/1     Running   0              2d18h   10.1.0.118   docker-desktop   <none>           <none>
+
+=======================================================================================================================
 
 
 
